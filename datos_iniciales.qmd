@@ -1,0 +1,129 @@
+---
+format: html
+editor: visual
+echo: false
+message: false
+---
+
+## 
+
+```{r}
+#| message: false
+library(tidyverse)
+library(readxl)
+library(here)
+library(flextable)
+```
+
+Estudio de título en la DGRP, antecedentes de padrones y sus colindanteses 1903, 1904 y 1905 de Puerto Casado, propiedades de la Comunidad Indígena Puerto María Auxiliadora, y colindantes Padrones N° 53, 326, 98 de la de Carmelo Peralta.
+
+Agosto 2022
+
+\
+
+ 
+
+**ÍNDICE**
+
+Contenido
+
+[A.   Objetivos 2](#_Toc113632610)
+
+[B.   Alcance. 2](#_Toc113632611)
+
+[C.   Actividades realizadas 2](#_Toc113632612)
+
+[D.   Antecedentes documentales y técnicos 4](#_Toc113632613)
+
+[E.   Georreferenciación de los inmuebles 28](#_Toc113632614)
+
+**\
+**
+
+# A. 
+
+Objetivos
+
+-       Recopilar antecedentes documentales de los inmuebles
+
+-       Conocer la situación de los inmuebles en sus aspectos técnicos y legales
+
+-       Sintetizar la información obtenida a partir de los antecedentes
+
+# B. 
+
+Alcance
+
+De acuerdo con la documentación proveída por la contratante, se resume en la siguiente tabla los inmuebles objeto de este estudio:
+
+```{r}
+#init_flextable_defaults()
+set_flextable_defaults(
+  post_process_html = autofit,
+  post_process_pdf = autofit,
+  post_process_docx = autofit
+)
+
+style_fnc <- function(ft){
+  # format table
+big_border = fp_border_default(color="black", width = 2)
+small_border = fp_border_default(color="gray", width = 1)
+# border_remove()
+
+theme_zebra(ft) |>
+  border_inner_h(part = "all",
+                 border = small_border) |>
+  border_inner_v(part = "all",
+                 border = big_border) |>
+  border_outer(part = "all",
+               border = big_border)  |>
+  align(part = "all",
+        align = "center") |>
+  autofit()
+}
+
+
+```
+
+```{r}
+#import data and add header row
+datos_iniciales <-
+  read_excel(here::here('data', "sintesis.xlsx"),
+             sheet = 1,
+             col_types = c("numeric", "text", "text","text","text", "text", 
+                           'text')) |>
+  flextable() |>
+  add_header_row(values = c("DATOS INICIALES"),
+                 colwidths = c(7))
+
+informe_snc <- 
+  read_excel(here::here('data', "sintesis.xlsx"),
+             sheet = 2,
+             col_types = c("text", "text", "text","text","text")) |>
+  flextable() |>
+  add_header_row(values = c("INFORME SNC"),
+                 colwidths = c(5))
+
+datos_registros_publicos <- 
+  read_excel(here::here('data', "sintesis.xlsx"),
+             sheet = 3,
+             col_types = c("numeric", "text", "text","text","text", "text", 'text', 'text', 'text', 'text')) |>
+  flextable() |>
+  add_header_row(values = c("Datos Registros Publicos"),
+                 colwidths = c(10))
+
+actividades_realizadas <- 
+  read_excel(here::here('data', "sintesis.xlsx"),
+             sheet = 4) |>
+  flextable() |>
+  add_header_row(values = c("Actividades Realizadas"),
+                 colwidths = c(5))
+```
+
+```{r}
+
+
+
+style_fnc(datos_iniciales)
+
+```
